@@ -1,6 +1,7 @@
 // SearchScreen.js
 
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   StyleSheet,
   View,
@@ -22,6 +23,7 @@ const SearchScreen = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   const searchMovies = async () => {
     setLoading(true);
@@ -53,7 +55,16 @@ const SearchScreen = () => {
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => console.log(item.name)}>
+    <TouchableOpacity       onPress={() =>
+      navigation.navigate('Details', {
+        movieId: item.id,
+        name: item.name,
+        image: item.image,
+        summary: item.summary,
+        genres: item.genres,
+        rating: item.rating,
+      })
+    }>
       <View style={styles.card}>
         <Image source={{ uri: item.image }} style={styles.image} />
         <View style={styles.cardContent}>
