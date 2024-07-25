@@ -40,6 +40,34 @@ const HomeStack = () => {
   );
 };
 
+// Create a separate stack navigator for the Search tab
+const SearchStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: "#1e1e1e",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ title: "Search Movies" }}
+      />
+      <Stack.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={{ title: "Movie Details" }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const App = () => {
   return (
     <NavigationContainer>
@@ -84,12 +112,12 @@ const MainTabs = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeStack}
+        component={HomeStack} // Use HomeStack for Home Tab
         options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Search"
-        component={SearchScreen}
+        component={SearchStack} // Use SearchStack for Search Tab
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

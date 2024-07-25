@@ -1,7 +1,7 @@
 // SearchScreen.js
 
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from "react";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -14,16 +14,17 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Keyboard,
-} from 'react-native';
-import axios from 'axios';
+} from "react-native";
+import axios from "axios";
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get("window");
 
 const SearchScreen = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const isFocused = useIsFocused(); // Hook to check if screen is focused
 
   const searchMovies = async () => {
     setLoading(true);
@@ -39,10 +40,10 @@ const SearchScreen = () => {
         name: item.show.name,
         image: item.show.image
           ? item.show.image.medium
-          : 'https://via.placeholder.com/210x295', // Placeholder for missing images
+          : "https://via.placeholder.com/210x295", // Placeholder for missing images
         url: item.show.url,
         summary: item.show.summary,
-        genres: item.show.genres.join(', '),
+        genres: item.show.genres.join(", "),
         rating: item.show.rating.average,
       }));
 
@@ -54,24 +55,32 @@ const SearchScreen = () => {
     }
   };
 
+  React.useEffect(() => {
+    if (isFocused && searchTerm) {
+      searchMovies(); // Re-run search if returning to the screen with a search term
+    }
+  }, [isFocused]); // Re-run effect when screen comes into focus
+
   const renderItem = ({ item }) => (
-    <TouchableOpacity       onPress={() =>
-      navigation.navigate('Details', {
-        movieId: item.id,
-        name: item.name,
-        image: item.image,
-        summary: item.summary,
-        genres: item.genres,
-        rating: item.rating,
-      })
-    }>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("Details", {
+          movieId: item.id,
+          name: item.name,
+          image: item.image,
+          summary: item.summary,
+          genres: item.genres,
+          rating: item.rating,
+        })
+      }
+    >
       <View style={styles.card}>
         <Image source={{ uri: item.image }} style={styles.image} />
         <View style={styles.cardContent}>
           <Text style={styles.title}>{item.name}</Text>
           <Text style={styles.genres}>{item.genres}</Text>
           <Text style={styles.rating}>
-            Rating: {item.rating ? item.rating : 'N/A'}
+            Rating: {item.rating ? item.rating : "N/A"}
           </Text>
         </View>
       </View>
@@ -92,7 +101,11 @@ const SearchScreen = () => {
           autoCapitalize="none"
         />
         {loading ? (
-          <ActivityIndicator size="large" color="#00ff00" style={styles.loader} />
+          <ActivityIndicator
+            size="large"
+            color="#00ff00"
+            style={styles.loader}
+          />
         ) : (
           <FlatList
             data={movies}
@@ -118,67 +131,65 @@ const SearchScreen = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#101010',
+    backgroundColor: "#101010",
   },
   container: {
     flex: 1,
-    backgroundColor: '#101010',
+    backgroundColor: "#101010",
     paddingHorizontal: 20,
     paddingTop: 10,
   },
   searchBar: {
-    backgroundColor: '#1e1e1e',
-    color: '#fff',
+    height: 40,
+    backgroundColor: "#1e1e1e",
+    color: "#fff",
+    borderRadius: 10,
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 8,
     marginBottom: 20,
-    fontSize: 16,
   },
   loader: {
     marginTop: 50,
   },
   row: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     marginBottom: 20,
   },
   card: {
-    backgroundColor: '#1e1e1e',
+    backgroundColor: "#1e1e1e",
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
     width: width / 2 - 25,
-    marginBottom: 10,
+    marginRight: 10,
   },
   image: {
-    width: '100%',
+    width: "100%",
     height: 160,
   },
   cardContent: {
     padding: 10,
   },
   title: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 5,
   },
   genres: {
-    color: '#ccc',
+    color: "#ccc",
     fontSize: 12,
     marginBottom: 5,
   },
   rating: {
-    color: '#f39c12',
+    color: "#f39c12",
     fontSize: 12,
   },
   contentContainer: {
     paddingBottom: 20,
   },
   noResults: {
-    color: '#ccc',
-    fontSize: 16,
-    textAlign: 'center',
+    color: "#ccc",
+    textAlign: "center",
     marginTop: 20,
   },
 });
