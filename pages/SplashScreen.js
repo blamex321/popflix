@@ -57,7 +57,7 @@ const SplashScreen = () => {
       </Animated.View>
 
       <Animated.View style={{ transform: [{ translateY: textPosition }] }}>
-        <Text style={styles.appName}>My Awesome App</Text>
+        <Text style={styles.appName}>PopFlix</Text>
       </Animated.View>
     </View>
   );

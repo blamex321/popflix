@@ -80,7 +80,7 @@ const HomeScreen = () => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {loading ? (
-          <ActivityIndicator size="large" color="#00ff00" style={styles.loader} />
+          <ActivityIndicator size="large" color="orange" style={styles.loader} />
         ) : (
           <FlatList
             data={movies}

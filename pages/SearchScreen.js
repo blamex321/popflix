@@ -103,7 +103,7 @@ const SearchScreen = () => {
         {loading ? (
           <ActivityIndicator
             size="large"
-            color="#00ff00"
+            color="orange"
             style={styles.loader}
           />
         ) : (
@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,
+    marginTop: 10,
   },
   loader: {
     marginTop: 50,
